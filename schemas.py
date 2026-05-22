@@ -1,40 +1,38 @@
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel
+from typing import Optional, List
 
-# Employee schemas
-class CreateEmployee(BaseModel):
-    emp_name:   str
-    emp_no:     int
-    phone_no:   str = Field(..., min_length=10, max_length=10)
-    department: str
-    role:       str
-    salary:     int
-    is_active:  bool = True
-    city:       str = "unknown"
+# Department schemas
+class DepartmentCreate(BaseModel):
+    dept_name: str
 
-class UpdateEmployee(BaseModel):
-    emp_name:   Optional[str] = None
-    emp_no:     Optional[int] = None
-    phone_no:   Optional[str] = None
-    department: Optional[str] = None
-    role:       Optional[str] = None
-    salary:     Optional[int] = None
-    is_active:  Optional[bool] = None
-    city:       Optional[str] = None
-
-class EmployeeResponse(BaseModel):
-    id:         int
-    emp_name:   str
-    emp_no:     int
-    department: str
-    role:       str
-    is_active:  bool
-    city:       str
+class DepartmentResponse(BaseModel):
+    id:        int
+    dept_name: str
 
     class Config:
         from_attributes = True
 
-# NEW — User schemas
+# Employee schemas
+class EmployeeCreate(BaseModel):
+    emp_name:  str
+    salary:    int
+    is_active: bool = True
+    city:      str = "unknown"
+    dept_id:   int
+
+class EmployeeResponse(BaseModel):
+    id:         int
+    emp_name:   str
+    salary:     int
+    is_active:  bool
+    city:       str
+    dept_id:    int
+    department: Optional[DepartmentResponse] = None
+
+    class Config:
+        from_attributes = True
+
+# User schemas
 class UserCreate(BaseModel):
     username: str
     password: str
